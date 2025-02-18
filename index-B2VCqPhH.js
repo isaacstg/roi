@@ -9422,117 +9422,6 @@ function Qe(e, t, r, n) {
 function ce(e, t) {
     return e.indexOf(t) !== -1
 }
-var Nd = function(e) {
-    return e.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "")
-}
-  , zv = function(e) {
-    return e.replace(/^\$/, "")
-}
-  , _o = function(e, t) {
-    if (!function(r) {
-        try {
-            new RegExp(r)
-        } catch {
-            return !1
-        }
-        return !0
-    }(t))
-        return !1;
-    try {
-        return new RegExp(t).test(e)
-    } catch {
-        return !1
-    }
-}
-  , rI = Array.isArray
-  , CE = Object.prototype
-  , jE = CE.hasOwnProperty
-  , Md = CE.toString
-  , Xe = rI || function(e) {
-    return Md.call(e) === "[object Array]"
-}
-  , wr = e => typeof e == "function"
-  , Ye = e => e === Object(e) && !Xe(e)
-  , Va = e => {
-    if (Ye(e)) {
-        for (var t in e)
-            if (jE.call(e, t))
-                return !1;
-        return !0
-    }
-    return !1
-}
-  , ee = e => e === void 0
-  , mt = e => Md.call(e) == "[object String]"
-  , mb = e => mt(e) && e.trim().length === 0
-  , Pi = e => e === null
-  , Pe = e => ee(e) || Pi(e)
-  , Rt = e => Md.call(e) == "[object Number]"
-  , Ji = e => Md.call(e) === "[object Boolean]"
-  , nI = e => e instanceof FormData
-  , iI = e => ce(Q2, e)
-  , IE = e => {
-    var t = {
-        _log: function(r) {
-            if (I && (_n.DEBUG || se.POSTHOG_DEBUG) && !ee(I.console) && I.console) {
-                for (var n = ("__rrweb_original__"in I.console[r]) ? I.console[r].__rrweb_original__ : I.console[r], i = arguments.length, a = new Array(i > 1 ? i - 1 : 0), o = 1; o < i; o++)
-                    a[o - 1] = arguments[o];
-                n(e, ...a)
-            }
-        },
-        info: function() {
-            for (var r = arguments.length, n = new Array(r), i = 0; i < r; i++)
-                n[i] = arguments[i];
-            t._log("log", ...n)
-        },
-        warn: function() {
-            for (var r = arguments.length, n = new Array(r), i = 0; i < r; i++)
-                n[i] = arguments[i];
-            t._log("warn", ...n)
-        },
-        error: function() {
-            for (var r = arguments.length, n = new Array(r), i = 0; i < r; i++)
-                n[i] = arguments[i];
-            t._log("error", ...n)
-        },
-        critical: function() {
-            for (var r = arguments.length, n = new Array(r), i = 0; i < r; i++)
-                n[i] = arguments[i];
-            console.error(e, ...n)
-        },
-        uninitializedWarning: r => {
-            t.error("You must initialize PostHog before calling ".concat(r))
-        }
-        ,
-        createLogger: r => IE("".concat(e, " ").concat(r))
-    };
-    return t
-}
-  , te = IE("[PostHog.js]")
-  , jt = te.createLogger
-  , aI = jt("[ExternalScriptsLoader]")
-  , yb = (e, t, r) => {
-    if (e.config.disable_external_dependency_loading)
-        return aI.warn("".concat(t, " was requested but loading of external scripts is disabled.")),
-        r("Loading of external scripts is disabled");
-    var n = () => {
-        if (!J)
-            return r("document not found");
-        var i = J.createElement("script");
-        if (i.type = "text/javascript",
-        i.crossOrigin = "anonymous",
-        i.src = t,
-        i.onload = s => r(void 0, s),
-        i.onerror = s => r(s),
-        e.config.prepare_external_dependency_script && (i = e.config.prepare_external_dependency_script(i)),
-        !i)
-            return r("prepare_external_dependency_script returned null");
-        var a, o = J.querySelectorAll("body > script");
-        o.length > 0 ? (a = o[0].parentNode) === null || a === void 0 || a.insertBefore(i, o[0]) : J.body.appendChild(i)
-    }
-    ;
-    J != null && J.body ? n() : J == null || J.addEventListener("DOMContentLoaded", n)
-}
 ;
 function _b(e, t) {
     var r = Object.keys(e);
@@ -9584,72 +9473,6 @@ function NE(e, t) {
             t.indexOf(r) >= 0 || Object.prototype.propertyIsEnumerable.call(e, r) && (i[r] = e[r])
     }
     return i
-}
-se.__PosthogExtensions__ = se.__PosthogExtensions__ || {},
-se.__PosthogExtensions__.loadExternalDependency = (e, t, r) => {
-    var n = "/static/".concat(t, ".js") + "?v=".concat(e.version);
-    if (t === "remote-config" && (n = "/array/".concat(e.config.token, "/config.js")),
-    t === "toolbar") {
-        var i = 3e5
-          , a = Math.floor(Date.now() / i) * i;
-        n = "".concat(n, "&t=").concat(a)
-    }
-    var o = e.requestRouter.endpointFor("assets", n);
-    yb(e, o, r)
-}
-,
-se.__PosthogExtensions__.loadSiteApp = (e, t, r) => {
-    var n = e.requestRouter.endpointFor("api", t);
-    yb(e, n, r)
-}
-;
-var ME = "$people_distinct_id"
-  , Ls = "__alias"
-  , Fs = "__timers"
-  , bb = "$autocapture_disabled_server_side"
-  , Uv = "$heatmaps_enabled_server_side"
-  , xb = "$exception_capture_enabled_server_side"
-  , wb = "$web_vitals_enabled_server_side"
-  , RE = "$dead_clicks_enabled_server_side"
-  , Sb = "$web_vitals_allowed_metrics"
-  , Hv = "$session_recording_enabled_server_side"
-  , Ob = "$console_log_recording_enabled_server_side"
-  , Pb = "$session_recording_network_payload_capture"
-  , Eb = "$session_recording_canvas_recording"
-  , Ab = "$replay_sample_rate"
-  , $b = "$replay_minimum_duration"
-  , kb = "$replay_script_config"
-  , nf = "$sesid"
-  , Bs = "$session_is_sampled"
-  , oh = "$session_recording_url_trigger_activated_session"
-  , sh = "$session_recording_event_trigger_activated_session"
-  , Ga = "$enabled_feature_flags"
-  , $c = "$early_access_features"
-  , zs = "$stored_person_properties"
-  , Hi = "$stored_group_properties"
-  , Wv = "$surveys"
-  , Vu = "$surveys_activated"
-  , af = "$flag_call_reported"
-  , hn = "$user_state"
-  , qv = "$client_session_props"
-  , Vv = "$capture_rate_limit"
-  , Gv = "$initial_campaign_params"
-  , Kv = "$initial_referrer_info"
-  , Xv = "$initial_person_info"
-  , of = "$epp"
-  , DE = "__POSTHOG_TOOLBAR__"
-  , Tb = "$posthog_cookieless"
-  , oI = [ME, Ls, "__cmpns", Fs, Hv, Uv, nf, Ga, hn, $c, Hi, zs, Wv, af, qv, Vv, Gv, Kv, of]
-  , ka = jt("[FeatureFlags]")
-  , lh = "$active_feature_flags"
-  , bs = "$override_feature_flags"
-  , Cb = "$feature_flag_payloads"
-  , Gu = "$override_feature_flag_payloads"
-  , jb = e => {
-    var t = {};
-    for (var [r,n] of Ac(e || {}))
-        n && (t[r] = n);
-    return t
 }
 ;
 class sI {
@@ -16958,9 +16781,9 @@ const wn = {
     companyInfo: "Basic information about your company's structure and financials.",
     distribution: "How your employees are distributed across countries and roles.",
     absenteeism: "Statistics about estimated employee absenteeism in your organisation.",
-    riskProfile: "Estimated risk level distribution in your organisation: high risk derived from absenteeism rates; medium risk derived from comparable company data in ifeel database.",
+    riskProfile: "Estimated risk level distribution in your organisation: high risk derived from absenteeism rates; medium risk derived from comparable company data in  database.",
     costs: "Financial impact of mental health issues in your organisation.",
-    improvement: "Projected savings and improvements with ifeel.",
+    improvement: "Projected savings and improvements with .",
     averageSalary: "Benchmark salary based on industry and countries of operation. Source: Statista.",
     employeeTypes: "Benchmark of employee type percentages based on industry. Source: Statista.",
     absenteeismInput: "Total time lost due to employee absences every year.",
@@ -17427,90 +17250,6 @@ function fM({data: e, onUpdate: t, onCalculate: r, onToggleSidebar: n}) {
             })]
         })]
     })
-}
-const dM = "/assets/feedback_steps_1-HRYafual.png"
-  , pM = "/assets/feedback_steps_2-D6PyAg_K.png"
-  , hM = "/assets/feedback_steps_3-Ul7HY-C7.png"
-  , vM = "/assets/feedback_steps_4-BaDdzDes.png";
-function gM({isOpen: e, onClose: t}) {
-    return e ? w.jsx("div", {
-        className: "fixed inset-0 bg-black/50 flex items-center justify-center z-50",
-        children: w.jsxs("div", {
-            className: "bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto m-4",
-            children: [w.jsxs("div", {
-                className: "p-6 border-b border-gray-200 flex justify-between items-center",
-                children: [w.jsx("h2", {
-                    className: "text-2xl font-semibold text-gray-900",
-                    children: "ROI Calculator feedback"
-                }), w.jsx("button", {
-                    onClick: t,
-                    className: "text-gray-500 hover:text-gray-700 transition-colors",
-                    children: w.jsx(nM, {
-                        size: 24
-                    })
-                })]
-            }), w.jsxs("div", {
-                className: "p-6 space-y-6",
-                children: [w.jsxs("p", {
-                    className: "text-gray-700 italic",
-                    children: ["Share your feedback on the ROI Calculator ", w.jsx("strong", {
-                        children: "in just 2 steps"
-                    })]
-                }), w.jsxs("div", {
-                    className: "space-y-8",
-                    children: [w.jsxs("div", {
-                        children: [w.jsx("h3", {
-                            className: "font-semibold text-lg text-gray-900 mb-4",
-                            children: '1. Add the "ifeel jarvis" app on Slack'
-                        }), w.jsx("p", {
-                            className: "text-gray-600 mb-4",
-                            children: "(if you already have it you can skip this step)"
-                        }), w.jsxs("div", {
-                            className: "space-y-4",
-                            children: [w.jsx("img", {
-                                src: dM,
-                                alt: "Step 1: Add to Slack button",
-                                className: "rounded-lg border border-gray-200 shadow-sm"
-                            }), w.jsx("img", {
-                                src: pM,
-                                alt: "Step 1: Allow in Slack",
-                                className: "rounded-lg border border-gray-200 shadow-sm"
-                            })]
-                        })]
-                    }), w.jsxs("div", {
-                        children: [w.jsx("h3", {
-                            className: "font-semibold text-lg text-gray-900 mb-4",
-                            children: '2. Search for "ROI Calculator feedback" in the Slack search bar'
-                        }), w.jsxs("div", {
-                            className: "space-y-4",
-                            children: [w.jsx("img", {
-                                src: hM,
-                                alt: "Step 2: Search in Slack",
-                                className: "rounded-lg border border-gray-200 shadow-sm"
-                            }), w.jsx("p", {
-                                className: "text-gray-700",
-                                children: "A form like this will appear. Please include all necessary details so we can properly address your feedback!"
-                            }), w.jsx("img", {
-                                src: vM,
-                                alt: "Step 2: Feedback form",
-                                className: "rounded-lg border border-gray-200 shadow-sm"
-                            })]
-                        })]
-                    })]
-                }), w.jsx("div", {
-                    className: "mt-8 pt-4 border-t border-gray-200",
-                    children: w.jsxs("p", {
-                        className: "text-gray-600 italic",
-                        children: ["If you encounter any issues during this process please contact", " ", w.jsx("a", {
-                            href: "mailto:pablo.benasco@ifeelonline.com",
-                            className: "text-indigo-600 hover:text-indigo-800",
-                            children: "pablo.benasco@ifeelonline.com"
-                        })]
-                    })
-                })]
-            })]
-        })
-    }) : null
 }
 function mM({isOpen: e, onToggle: t, industry: r, stats: n, countries: i, distribution: a, absenteeismData: o, riskParameters: s, pilotData: l, onIndustryChange: u, onStatsUpdate: f, onAddCountry: c, onDeleteCountry: d, onUpdateCountry: p, onUpdateDistribution: h, onUpdateAbsenteeismData: v, onUpdateRiskParameters: _, onUpdatePilot: m, onUpdatePercentagePilot: g, onCalculate: y, setStats: S, setDistribution: b, setAbsenteeismData: x}) {
     const [O,P] = L.useState(0);
@@ -40897,7 +40636,7 @@ function kre({costs: e, savingsAndCosts: t, pilotEmployees: r}) {
                 style: {
                     color: Wt.primary
                 },
-                children: "Total costs related to mental health after ifeel use"
+                children: "Total costs related to mental health after  use"
             })]
         }), w.jsxs("div", {
             style: {
@@ -41002,7 +40741,7 @@ function kre({costs: e, savingsAndCosts: t, pilotEmployees: r}) {
                         }), w.jsx(Go, {
                             tickFormatter: p => `€${(p / 1e3).toLocaleString()}k`
                         }), w.jsx(Et, {
-                            formatter: (p, h) => h === "costs" ? [Kn(p), a ? "Costs related to mental health" : "Costs after ifeel use"] : h === "savings" ? [Kn(p), "Cumulative savings"] : [Kn(p), h],
+                            formatter: (p, h) => h === "costs" ? [Kn(p), a ? "Costs related to mental health" : "Costs after  use"] : h === "savings" ? [Kn(p), "Cumulative savings"] : [Kn(p), h],
                             labelStyle: {
                                 color: "#111827"
                             },
@@ -41028,7 +40767,7 @@ function kre({costs: e, savingsAndCosts: t, pilotEmployees: r}) {
                             children: [w.jsx(Cn, {}), w.jsx(_r, {
                                 dataKey: "costs",
                                 fill: Wt.primary,
-                                name: "Costs after ifeel use",
+                                name: "Costs after  use",
                                 label: w.jsx(c, {})
                             }), w.jsx(_r, {
                                 dataKey: "savings",
@@ -41149,7 +40888,7 @@ function Cre({onLogin: e}) {
       , [a,o] = L.useState("")
       , s = l => {
         l.preventDefault(),
-        t === "ifeelonline" && n === "ifeelBI2025" ? e() : o("Invalid username or password")
+        t === "online" && n === "test2025" ? e() : o("Invalid username or password")
     }
     ;
     return w.jsx("div", {
@@ -41159,7 +40898,7 @@ function Cre({onLogin: e}) {
             children: [w.jsxs("div", {
                 children: [w.jsx("h2", {
                     className: "text-center text-3xl font-bold text-gray-900",
-                    children: "login to ifeel ROI Calculator"
+                    children: "login to  ROI Calculator"
                 }), w.jsx("p", {
                     className: "mt-2 text-center text-sm text-gray-600"
                 })]
@@ -41331,11 +41070,6 @@ function Ire() {
         onLogin: () => t(!0)
     })
 }
-typeof window < "u" && (console.log("Initializing PostHog..."),
-bn.init("phc_jXPX6JvR8PmqrttwZwTJF0xFkYCgf9g0BhEkBg3hYox", {
-    api_host: "https://eu.i.posthog.com",
-    loaded: e => {}
-}));
 $E(document.getElementById("root")).render(w.jsx(L.StrictMode, {
     children: w.jsx(qN, {
         client: bn,
