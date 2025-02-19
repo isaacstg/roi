@@ -16958,9 +16958,9 @@ const wn = {
     companyInfo: "Basic information about your company's structure and financials.",
     distribution: "How your employees are distributed across countries and roles.",
     absenteeism: "Statistics about estimated employee absenteeism in your organisation.",
-    riskProfile: "Estimated risk level distribution in your organisation: high risk derived from absenteeism rates; medium risk derived from comparable company data in ifeel database.",
+    riskProfile: "Estimated risk level distribution in your organisation: high risk derived from absenteeism rates; medium risk derived from comparable company data in  database.",
     costs: "Financial impact of mental health issues in your organisation.",
-    improvement: "Projected savings and improvements with ifeel.",
+    improvement: "Projected savings and improvements with .",
     averageSalary: "Benchmark salary based on industry and countries of operation. Source: Statista.",
     employeeTypes: "Benchmark of employee type percentages based on industry. Source: Statista.",
     absenteeismInput: "Total time lost due to employee absences every year.",
@@ -17453,18 +17453,18 @@ function gM({isOpen: e, onClose: t}) {
                 className: "p-6 space-y-6",
                 children: [w.jsxs("p", {
                     className: "text-gray-700 italic",
-                    children: ["Share your feedback on the ROI Calculator ", w.jsx("strong", {
-                        children: "in just 2 steps"
+                    children: ["", {
+                        children: ""
                     })]
                 }), w.jsxs("div", {
                     className: "space-y-8",
                     children: [w.jsxs("div", {
                         children: [w.jsx("h3", {
                             className: "font-semibold text-lg text-gray-900 mb-4",
-                            children: '1. Add the "ifeel jarvis" app on Slack'
+                            children: ''
                         }), w.jsx("p", {
                             className: "text-gray-600 mb-4",
-                            children: "(if you already have it you can skip this step)"
+                            children: ""
                         }), w.jsxs("div", {
                             className: "space-y-4",
                             children: [w.jsx("img", {
@@ -17473,14 +17473,14 @@ function gM({isOpen: e, onClose: t}) {
                                 className: "rounded-lg border border-gray-200 shadow-sm"
                             }), w.jsx("img", {
                                 src: pM,
-                                alt: "Step 1: Allow in Slack",
+                                alt: "",
                                 className: "rounded-lg border border-gray-200 shadow-sm"
                             })]
                         })]
                     }), w.jsxs("div", {
                         children: [w.jsx("h3", {
                             className: "font-semibold text-lg text-gray-900 mb-4",
-                            children: '2. Search for "ROI Calculator feedback" in the Slack search bar'
+                            children: ''
                         }), w.jsxs("div", {
                             className: "space-y-4",
                             children: [w.jsx("img", {
@@ -17489,7 +17489,7 @@ function gM({isOpen: e, onClose: t}) {
                                 className: "rounded-lg border border-gray-200 shadow-sm"
                             }), w.jsx("p", {
                                 className: "text-gray-700",
-                                children: "A form like this will appear. Please include all necessary details so we can properly address your feedback!"
+                                children: ""
                             }), w.jsx("img", {
                                 src: vM,
                                 alt: "Step 2: Feedback form",
@@ -17501,10 +17501,10 @@ function gM({isOpen: e, onClose: t}) {
                     className: "mt-8 pt-4 border-t border-gray-200",
                     children: w.jsxs("p", {
                         className: "text-gray-600 italic",
-                        children: ["If you encounter any issues during this process please contact", " ", w.jsx("a", {
-                            href: "mailto:pablo.benasco@ifeelonline.com",
+                        children: ["", " ", w.jsx("a", {
+                            href: "",
                             className: "text-indigo-600 hover:text-indigo-800",
-                            children: "pablo.benasco@ifeelonline.com"
+                            children: ""
                         })]
                     })
                 })]
@@ -17587,7 +17587,7 @@ function mM({isOpen: e, onToggle: t, industry: r, stats: n, countries: i, distri
                         children: [w.jsx(JN, {
                             size: 18
                         }), w.jsx("span", {
-                            children: "Give Feedback"
+                            children: ""
                         })]
                     })
                 })]
@@ -40897,7 +40897,7 @@ function kre({costs: e, savingsAndCosts: t, pilotEmployees: r}) {
                 style: {
                     color: Wt.primary
                 },
-                children: "Total costs related to mental health after ifeel use"
+                children: "Total costs related to mental health after  use"
             })]
         }), w.jsxs("div", {
             style: {
@@ -41002,7 +41002,7 @@ function kre({costs: e, savingsAndCosts: t, pilotEmployees: r}) {
                         }), w.jsx(Go, {
                             tickFormatter: p => `€${(p / 1e3).toLocaleString()}k`
                         }), w.jsx(Et, {
-                            formatter: (p, h) => h === "costs" ? [Kn(p), a ? "Costs related to mental health" : "Costs after ifeel use"] : h === "savings" ? [Kn(p), "Cumulative savings"] : [Kn(p), h],
+                            formatter: (p, h) => h === "costs" ? [Kn(p), a ? "Costs related to mental health" : "Costs after  use"] : h === "savings" ? [Kn(p), "Cumulative savings"] : [Kn(p), h],
                             labelStyle: {
                                 color: "#111827"
                             },
@@ -41028,7 +41028,7 @@ function kre({costs: e, savingsAndCosts: t, pilotEmployees: r}) {
                             children: [w.jsx(Cn, {}), w.jsx(_r, {
                                 dataKey: "costs",
                                 fill: Wt.primary,
-                                name: "Costs after ifeel use",
+                                name: "Costs after  use",
                                 label: w.jsx(c, {})
                             }), w.jsx(_r, {
                                 dataKey: "savings",
@@ -41149,7 +41149,7 @@ function Cre({onLogin: e}) {
       , [a,o] = L.useState("")
       , s = l => {
         l.preventDefault(),
-        t === "ifeelonline" && n === "ifeelBI2025" ? e() : o("Invalid username or password")
+        t === "online" && n === "2025" ? e() : o("Invalid username or password")
     }
     ;
     return w.jsx("div", {
@@ -41159,7 +41159,7 @@ function Cre({onLogin: e}) {
             children: [w.jsxs("div", {
                 children: [w.jsx("h2", {
                     className: "text-center text-3xl font-bold text-gray-900",
-                    children: "login to ifeel ROI Calculator"
+                    children: "login to  ROI Calculator"
                 }), w.jsx("p", {
                     className: "mt-2 text-center text-sm text-gray-600"
                 })]
