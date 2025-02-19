@@ -42,6 +42,7 @@ var gO = {
     exports: {}
 }
   , de = {};
+
 /**
  * @license React
  * react.production.min.js
@@ -17441,7 +17442,7 @@ function gM({isOpen: e, onClose: t}) {
                 className: "p-6 border-b border-gray-200 flex justify-between items-center",
                 children: [w.jsx("h2", {
                     className: "text-2xl font-semibold text-gray-900",
-                    children: "ROI Calculator feedback"
+                    children: ""
                 }), w.jsx("button", {
                     onClick: t,
                     className: "text-gray-500 hover:text-gray-700 transition-colors",
@@ -17453,7 +17454,7 @@ function gM({isOpen: e, onClose: t}) {
                 className: "p-6 space-y-6",
                 children: [w.jsxs("p", {
                     className: "text-gray-700 italic",
-                    children: ["", {
+                    children: ["", w.jsx("strong", {
                         children: ""
                     })]
                 }), w.jsxs("div", {
@@ -17485,14 +17486,14 @@ function gM({isOpen: e, onClose: t}) {
                             className: "space-y-4",
                             children: [w.jsx("img", {
                                 src: hM,
-                                alt: "Step 2: Search in Slack",
+                                alt: "",
                                 className: "rounded-lg border border-gray-200 shadow-sm"
                             }), w.jsx("p", {
                                 className: "text-gray-700",
                                 children: ""
                             }), w.jsx("img", {
                                 src: vM,
-                                alt: "Step 2: Feedback form",
+                                alt: "",
                                 className: "rounded-lg border border-gray-200 shadow-sm"
                             })]
                         })]
