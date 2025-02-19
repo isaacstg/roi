@@ -40025,15 +40025,35 @@ const br = {
     secondary: "#10B981",
     accent: "#F59E0B"
 };
+import React, { useRef } from 'react';
+import { PieChart, Pie, Tooltip, Cell, ResponsiveContainer } from 'recharts';
+import { saveAsImage } from './utils';
+
 function Pre({employeesByCountry: e, employeesByType: t, showCharts: r}) {
-    const n = Object.entries(e).map( ([l,u], f) => ({
+    const countryChartRef = useRef(null);
+    const typeChartRef = useRef(null);
+
+    const saveCountryChart = () => {
+        if (countryChartRef.current) {
+            saveAsImage(countryChartRef.current, 'employees_by_country.png');
+        }
+    };
+
+    const saveTypeChart = () => {
+        if (typeChartRef.current) {
+            saveAsImage(typeChartRef.current, 'employees_by_type.png');
+        }
+    };
+
+    const n = Object.entries(e).map(([l,u], f) => ({
         name: l,
         value: u,
         color: br.primary,
-        percentage: u / Object.values(e).reduce( (c, d) => c + d, 0) * 100
-    }))
-      , i = t.management + t.white_collar + t.blue_collar
-      , a = [{
+        percentage: u / Object.values(e).reduce((c, d) => c + d, 0) * 100
+    }));
+
+    const i = t.management + t.white_collar + t.blue_collar;
+    const a = [{
         name: "Management",
         value: t.management,
         color: br.management,
@@ -40048,134 +40068,122 @@ function Pre({employeesByCountry: e, employeesByType: t, showCharts: r}) {
         value: t.blue_collar,
         color: br.blueCollar,
         percentage: t.blue_collar / i * 100
-    }]
-      , o = l => {
-        const {cx: u, cy: f, midAngle: c, innerRadius: d, outerRadius: p, value: h, name: v, percentage: _} = l
-          , m = Math.PI / 180
-          , g = d + (p - d) * 2.2
-          , y = u + g * Math.cos(-c * m)
-          , S = f + g * Math.sin(-c * m)
-          , b = Math.sin(-c * m)
-          , x = Math.cos(-c * m)
-          , O = x >= 0 ? "start" : "end"
-          , P = {
+    }];
+
+    const o = l => {
+        const {cx: u, cy: f, midAngle: c, innerRadius: d, outerRadius: p, value: h, name: v, percentage: _} = l;
+        const m = Math.PI / 180;
+        const g = d + (p - d) * 2.2;
+        const y = u + g * Math.cos(-c * m);
+        const S = f + g * Math.sin(-c * m);
+        const b = Math.sin(-c * m);
+        const x = Math.cos(-c * m);
+        const O = x >= 0 ? "start" : "end";
+        const P = {
             x: u + (p + 25) * x,
             y: f + (p + 25) * b
         };
-        return w.jsxs(w.Fragment, {
-            children: [w.jsx("line", {
-                x1: u + p * x,
-                y1: f + p * b,
-                x2: P.x,
-                y2: P.y,
-                stroke: "#666",
-                strokeWidth: 1
-            }), w.jsx("line", {
-                x1: P.x,
-                y1: P.y,
-                x2: y,
-                y2: S,
-                stroke: "#666",
-                strokeWidth: 1
-            }), w.jsx("text", {
-                x: y + (x >= 0 ? 5 : -5),
-                y: S,
-                fill: "#374151",
-                textAnchor: O,
-                dominantBaseline: "central",
-                className: "text-xs",
-                children: `${v} (${_.toFixed(1)}%)`
-            })]
-        })
-    }
-      , s = ({active: l, payload: u}) => {
+        return (
+            <React.Fragment>
+                <line x1={u + p * x} y1={f + p * b} x2={P.x} y2={P.y} stroke="#666" strokeWidth={1} />
+                <line x1={P.x} y1={P.y} x2={y} y2={S} stroke="#666" strokeWidth={1} />
+                <text x={y + (x >= 0 ? 5 : -5)} y={S} fill="#374151" textAnchor={O} dominantBaseline="central" className="text-xs">
+                    {`${v} (${_.toFixed(1)}%)`}
+                </text>
+            </React.Fragment>
+        );
+    };
+
+    const s = ({active: l, payload: u}) => {
         if (l && u && u.length) {
             const f = u[0].payload;
-            return w.jsxs("div", {
-                className: "bg-white p-2 border border-gray-200 rounded shadow-sm",
-                children: [w.jsx("p", {
-                    className: "font-medium",
-                    children: f.name
-                }), w.jsxs("p", {
-                    className: "text-gray-600",
-                    children: [Math.round(f.value).toLocaleString(), " (", f.percentage.toFixed(1), "%)"]
-                })]
-            })
+            return (
+                <div className="bg-white p-2 border border-gray-200 rounded shadow-sm">
+                    <p className="font-medium">{f.name}</p>
+                    <p className="text-gray-600">
+                        {Math.round(f.value).toLocaleString()} ({f.percentage.toFixed(1)}%)
+                    </p>
+                </div>
+            );
         }
-        return null
-    }
-    ;
-    return w.jsxs("div", {
-        className: "grid grid-cols-1 lg:grid-cols-2 gap-6",
-        children: [w.jsxs("div", {
-            className: "bg-white p-6 rounded-lg shadow-lg",
-            children: [w.jsx("h3", {
-                className: "text-lg text-gray-900 font-semibold mb-4",
-                children: "Employees by Country"
-            }), w.jsx("div", {
-                className: `h-[300px] transition-opacity duration-500 ${r ? "opacity-100" : "opacity-0"}`,
-                children: w.jsx(ma, {
-                    width: "100%",
-                    height: "100%",
-                    children: w.jsxs(gd, {
-                        children: [w.jsx(jr, {
-                            data: n,
-                            cx: "50%",
-                            cy: "50%",
-                            innerRadius: 60,
-                            outerRadius: 80,
-                            paddingAngle: 5,
-                            dataKey: "value",
-                            label: o,
-                            isAnimationActive: r,
-                            animationBegin: 0,
-                            animationDuration: 800,
-                            animationEasing: "ease-out",
-                            children: n.map( (l, u) => w.jsx(sn, {
-                                fill: l.color
-                            }, `cell-${u}`))
-                        }), w.jsx(Et, {
-                            content: w.jsx(s, {})
-                        })]
-                    })
-                })
-            })]
-        }), w.jsxs("div", {
-            className: "bg-white p-6 rounded-lg shadow-lg",
-            children: [w.jsx("h3", {
-                className: "text-lg text-gray-900 font-semibold mb-4",
-                children: "Employees by Type"
-            }), w.jsx("div", {
-                className: `h-[300px] transition-opacity duration-500 ${r ? "opacity-100" : "opacity-0"}`,
-                children: w.jsx(ma, {
-                    width: "100%",
-                    height: "100%",
-                    children: w.jsxs(gd, {
-                        children: [w.jsx(jr, {
-                            data: a,
-                            cx: "50%",
-                            cy: "50%",
-                            innerRadius: 60,
-                            outerRadius: 80,
-                            paddingAngle: 5,
-                            dataKey: "value",
-                            label: o,
-                            isAnimationActive: r,
-                            animationBegin: 0,
-                            animationDuration: 800,
-                            animationEasing: "ease-out",
-                            children: a.map( (l, u) => w.jsx(sn, {
-                                fill: l.color
-                            }, `cell-${u}`))
-                        }), w.jsx(Et, {
-                            content: w.jsx(s, {})
-                        })]
-                    })
-                })
-            })]
-        })]
-    })
+        return null;
+    };
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h3 className="text-lg text-gray-900 font-semibold mb-4">Employees by Country</h3>
+                <div ref={countryChartRef} className={`h-[300px] transition-opacity duration-500 ${r ? "opacity-100" : "opacity-0"}`}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                            <Pie
+                                data={n}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={60}
+                                outerRadius={80}
+                                paddingAngle={5}
+                                dataKey="value"
+                                label={o}
+                                isAnimationActive={r}
+                                animationBegin={0}
+                                animationDuration={800}
+                                animationEasing="ease-out"
+                            >
+                                {n.map((l, u) => (
+                                    <Cell key={`cell-${u}`} fill={l.color} />
+                                ))}
+                            </Pie>
+                            <Tooltip content={<s />} />
+                        </PieChart>
+                    </ResponsiveContainer>
+                </div>
+                <button
+                    onClick={saveCountryChart}
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                    Save Country Chart
+                </button>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h3 className="text-lg text-gray-900 font-semibold mb-4">Employees by Type</h3>
+                <div ref={typeChartRef} className={`h-[300px] transition-opacity duration-500 ${r ? "opacity-100" : "opacity-0"}`}>
+                    <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                            <Pie
+                                data={a}
+                                cx="50%"
+                                cy="50%"
+                                innerRadius={60}
+                                outerRadius={80}
+                                paddingAngle={5}
+                                dataKey="value"
+                                label={o}
+                                isAnimationActive={r}
+                                animationBegin={0}
+                                animationDuration={800}
+                                animationEasing="ease-out"
+                            >
+                                {a.map((l, u) => (
+                                    <Cell key={`cell-${u}`} fill={l.color} />
+                                ))}
+                            </Pie>
+                            <Tooltip content={<s />} />
+                        </PieChart>
+                    </ResponsiveContainer>
+                </div>
+                <button
+                    onClick={saveTypeChart}
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                    Save Type Chart
+                </button>
+            </div>
+        </div>
+    );
 }
+
+export default Pre;
 const md = ({title: e, infoKey: t}) => w.jsxs("div", {
     className: "flex items-center gap-2",
     children: [w.jsx("h3", {
@@ -40194,7 +40202,26 @@ const md = ({title: e, infoKey: t}) => w.jsxs("div", {
         })]
     })]
 });
+import React, { useRef } from 'react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
+import { saveAsImage } from './utils';
+
 function Ere({absenteeismByType: e, absenteeismByLength: t, totalRate: r, mentalHealthRate: n, averageLeaveDuration: i}) {
+    const byTypeChartRef = useRef(null);
+    const byLengthChartRef = useRef(null);
+
+    const saveByTypeChart = () => {
+        if (byTypeChartRef.current) {
+            saveAsImage(byTypeChartRef.current, 'absenteeism_by_type.png');
+        }
+    };
+
+    const saveByLengthChart = () => {
+        if (byLengthChartRef.current) {
+            saveAsImage(byLengthChartRef.current, 'absenteeism_by_length.png');
+        }
+    };
+
     const a = [{
         name: "Management",
         value: Math.round(e.management / 100 * (r / 100)),
@@ -40207,8 +40234,9 @@ function Ere({absenteeismByType: e, absenteeismByLength: t, totalRate: r, mental
         name: "Blue Collar",
         value: Math.round(e.blue_collar / 100 * (r / 100)),
         color: br.blueCollar
-    }]
-      , o = [{
+    }];
+
+    const o = [{
         name: "Shorter than 4 months",
         value: Math.round(t.less_4_months * 100),
         color: br.secondary
@@ -40216,123 +40244,97 @@ function Ere({absenteeismByType: e, absenteeismByLength: t, totalRate: r, mental
         name: "Longer than 4 months",
         value: Math.round(t.more_4_months * 100),
         color: br.primary
-    }]
-      , s = ({active: l, payload: u, label: f}) => l && u && u.length ? w.jsxs("div", {
-        className: "bg-white p-2 border border-gray-200 rounded shadow-sm",
-        children: [w.jsx("p", {
-            className: "font-medium",
-            children: f
-        }), w.jsx("p", {
-            className: "text-gray-600",
-            children: u[0].payload.type === "length" ? `${Math.round(u[0].value)}%` : `${Math.round(u[0].value)}`
-        })]
-    }) : null;
-    return w.jsxs("div", {
-        className: "space-y-4",
-        children: [w.jsx(md, {
-            title: "Absenteeism",
-            infoKey: "absenteeism"
-        }), w.jsxs("p", {
-            className: "text-gray-600",
-            children: ["Absenteeism rate (annual) ", w.jsxs("strong", {
-                children: [r.toFixed(2), "%"]
-            }), " of which", " ", w.jsxs("strong", {
-                children: [n.toFixed(1), "%"]
-            }), " due to mental health"]
-        }), w.jsxs("div", {
-            className: "grid grid-cols-2 gap-6",
-            children: [w.jsxs("div", {
-                children: [w.jsx("h4", {
-                    className: "text-sm font-medium text-gray-700 mb-2",
-                    children: "By Employee Type"
-                }), w.jsx("div", {
-                    className: "h-[220px]",
-                    children: w.jsx(ma, {
-                        width: "100%",
-                        height: "100%",
-                        children: w.jsxs(Um, {
-                            data: a,
-                            layout: "horizontal",
-                            margin: {
-                                top: 20,
-                                right: 50,
-                                bottom: 40,
-                                left: 20
-                            },
-                            children: [w.jsx(dd, {
-                                strokeDasharray: "3 3"
-                            }), w.jsx(qo, {
-                                dataKey: "name",
-                                angle: -45,
-                                textAnchor: "end",
-                                height: 60,
-                                interval: 0
-                            }), w.jsx(Go, {}), w.jsx(Et, {
-                                content: w.jsx(s, {})
-                            }), w.jsx(_r, {
-                                dataKey: "value",
-                                label: {
-                                    position: "top",
-                                    formatter: l => `${Math.round(l)}`
-                                },
-                                children: a.map( (l, u) => w.jsx(sn, {
-                                    fill: l.color
-                                }, `cell-${u}`))
-                            })]
-                        })
-                    })
-                })]
-            }), w.jsxs("div", {
-                children: [w.jsx("h4", {
-                    className: "text-sm font-medium text-gray-700 mb-2",
-                    children: "By Length"
-                }), w.jsx("div", {
-                    className: "h-[220px]",
-                    children: w.jsx(ma, {
-                        width: "100%",
-                        height: "100%",
-                        children: w.jsxs(gd, {
-                            children: [w.jsx(jr, {
-                                data: o.map(l => ({
-                                    ...l,
-                                    type: "length"
-                                })),
-                                cx: "50%",
-                                cy: "50%",
-                                innerRadius: 45,
-                                outerRadius: 65,
-                                paddingAngle: 5,
-                                dataKey: "value",
-                                children: o.map( (l, u) => w.jsx(sn, {
-                                    fill: l.color
-                                }, `cell-${u}`))
-                            }), w.jsx(Et, {
-                                content: w.jsx(s, {})
-                            }), w.jsx(Cn, {
-                                layout: "vertical",
-                                align: "right",
-                                verticalAlign: "middle",
-                                formatter: l => w.jsx("span", {
-                                    className: "text-xs",
-                                    children: l
-                                }),
-                                wrapperStyle: {
-                                    paddingLeft: "10px",
-                                    fontSize: "12px"
-                                }
-                            })]
-                        })
-                    })
-                }), w.jsxs("p", {
-                    className: "text-sm text-gray-600 text-center mt-2",
-                    children: ["Average leave duration: ", w.jsxs("strong", {
-                        children: [i, " days"]
-                    })]
-                })]
-            })]
-        })]
-    })
+    }];
+
+    const s = ({active: l, payload: u, label: f}) => l && u && u.length ? (
+        <div className="bg-white p-2 border border-gray-200 rounded shadow-sm">
+            <p className="font-medium">{f}</p>
+            <p className="text-gray-600">
+                {u[0].payload.type === "length" ? `${Math.round(u[0].value)}%` : `${Math.round(u[0].value)}`}
+            </p>
+        </div>
+    ) : null;
+
+    return (
+        <div className="space-y-4">
+            <md title="Absenteeism" infoKey="absenteeism" />
+            <p className="text-gray-600">
+                Absenteeism rate (annual) <strong>{r.toFixed(2)}%</strong> of which{" "}
+                <strong>{n.toFixed(1)}%</strong> due to mental health
+            </p>
+            <div className="grid grid-cols-2 gap-6">
+                <div>
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">By Employee Type</h4>
+                    <div ref={byTypeChartRef} className="h-[220px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                                data={a}
+                                layout="horizontal"
+                                margin={{top: 20, right: 50, bottom: 40, left: 20}}
+                            >
+                                <XAxis dataKey="name" angle={-45} textAnchor="end" height={60} interval={0} />
+                                <YAxis />
+                                <Tooltip content={<s />} />
+                                <Bar dataKey="value" label={{position: "top", formatter: l => `${Math.round(l)}`}}>
+                                    {a.map((l, u) => (
+                                        <Cell key={`cell-${u}`} fill={l.color} />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <button
+                        onClick={saveByTypeChart}
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                        Save By Type Chart
+                    </button>
+                </div>
+                <div>
+                    <h4 className="text-sm font-medium text-gray-700 mb-2">By Length</h4>
+                    <div ref={byLengthChartRef} className="h-[220px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie
+                                    data={o.map(l => ({...l, type: "length"}))}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={45}
+                                    outerRadius={65}
+                                    paddingAngle={5}
+                                    dataKey="value"
+                                >
+                                    {o.map((l, u) => (
+                                        <Cell key={`cell-${u}`} fill={l.color} />
+                                    ))}
+                                </Pie>
+                                <Tooltip content={<s />} />
+                                <Legend
+                                    layout="vertical"
+                                    align="right"
+                                    verticalAlign="middle"
+                                    formatter={l => <span className="text-xs">{l}</span>}
+                                    wrapperStyle={{paddingLeft: "10px", fontSize: "12px"}}
+                                />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <button
+                        onClick={saveByLengthChart}
+                        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    >
+                        Save By Length Chart
+                    </button>
+                </div>
+            </div>
+            <p className="text-sm text-gray-600 text-center mt-2">
+                Average leave duration: <strong>{i} days</strong>
+            </p>
+        </div>
+    );
 }
+
+export default Ere;
 function Are({riskProfile: e}) {
     const t = [{
         name: "High Risk",
@@ -40554,17 +40556,135 @@ function wC() {
         }
     }
 }
+const Wt = {
+    lowRisk: "#10B981",
+    mediumRisk: "#F59E0B",
+    highRisk: "#EF4444",
+    management: "#8B5CF6",
+    whiteCollar: "#6B7280",
+    blueCollar: "#3B82F6",
+    primary: "#4F46E5",
+    secondary: "#10B981",
+    terciary: "#F59E0B",
+    accent: "#F59E0B"
+}
+  , $re = {
+    highRisk: 3,
+    mediumRisk: 65,
+    lowRisk: 32,
+    expectedImprovement: 20
+};
+function wC() {
+    const [e,t] = L.useState(!0)
+      , [r,n] = L.useState(!1)
+      , [i,a] = L.useState("")
+      , [o,s] = L.useState([{
+        id: Math.random().toString(36).substr(2, 9),
+        country: "",
+        totalEmployees: "",
+        distribution: {
+            management: 0,
+            whiteCollar: 0,
+            blueCollar: 0
+        }
+    }])
+      , [l,u] = L.useState({
+        averageSalary: 0,
+        totalEmployees: 0
+    })
+      , [f,c] = L.useState({
+        management: 15,
+        whiteCollar: 50,
+        blueCollar: 35
+    })
+      , [d,p] = L.useState({
+        totalRate: 4.5,
+        mentalHealthRate: 30,
+        averageLeaveDuration: 14,
+        byType: {
+            management: 25,
+            whiteCollar: 35,
+            blueCollar: 40
+        },
+        byLength: {
+            longTerm: 40,
+            shortTerm: 60
+        }
+    })
+      , [h,v] = L.useState($re)
+      , [_,m] = L.useState({
+        pilot: "No",
+        percentagePilot: 0
+    });
+    return {
+        sidebarOpen: e,
+        setSidebarOpen: t,
+        showDashboard: r,
+        setShowDashboard: n,
+        industry: i,
+        setIndustry: a,
+        countries: o,
+        setCountries: s,
+        stats: l,
+        setStats: u,
+        distribution: f,
+        setDistribution: c,
+        absenteeismData: d,
+        setAbsenteeismData: p,
+        riskParameters: h,
+        updateRiskParameters: (b, x) => {
+            v(O => ({
+                ...O,
+                [b]: x
+            }))
+        }
+        ,
+        pilotData: _,
+        updatePilot: b => {
+            m(x => ({
+                ...x,
+                pilot: b
+            }))
+        }
+        ,
+        updatePercentagePilot: b => {
+            m(x => ({
+                ...x,
+                percentagePilot: b
+            }))
+        }
+    }
+}
+import React, { useRef } from 'react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
+import { saveAsImage } from './utils';
+
 function kre({costs: e, savingsAndCosts: t, pilotEmployees: r}) {
-    const {riskParameters: n} = wC()
-      , i = e.low_risk + e.medium_risk + e.high_risk
-      , a = t.some(p => p.year === 0)
-      , o = t.map(p => ({
+    const costsChartRef = useRef(null);
+    const improvementChartRef = useRef(null);
+    const {riskParameters: n} = wC();
+
+    const saveCostsChart = () => {
+        if (costsChartRef.current) {
+            saveAsImage(costsChartRef.current, 'company_costs_chart.png');
+        }
+    };
+
+    const saveImprovementChart = () => {
+        if (improvementChartRef.current) {
+            saveAsImage(improvementChartRef.current, 'expected_improvement_chart.png');
+        }
+    };
+
+    const i = e.low_risk + e.medium_risk + e.high_risk;
+    const a = t.some(p => p.year === 0);
+    const o = t.map(p => ({
         name: a ? p.year === 0 ? `Pilot (${r} employees)` : `Year ${p.year}` : `Year ${p.year}`,
         costs: p.cost_after_use,
         savings: p.cumulative_savings,
         originalYear: p.year
-    }))
-      , s = [{
+    }));
+    const s = [{
         name: "Costs from low risk",
         value: e.low_risk,
         color: Wt.lowRisk
@@ -40576,212 +40696,133 @@ function kre({costs: e, savingsAndCosts: t, pilotEmployees: r}) {
         name: "Costs from high risk",
         value: e.high_risk,
         color: Wt.highRisk
-    }]
-      , l = Math.max(0, n.expectedImprovement - 5)
-      , u = n.expectedImprovement + 5
-      , f = ({x: p, y: h, width: v, value: _}) => w.jsx("text", {
-        x: p + v + 5,
-        y: h + 20,
-        fill: "#666",
-        textAnchor: "start",
-        fontSize: 11,
-        children: Kn(_)
-    })
-      , c = ({x: p, y: h, width: v, value: _}) => _ ? w.jsx("text", {
-        x: p + v / 2,
-        y: h - 10,
-        fill: "#666",
-        textAnchor: "middle",
-        fontSize: 11,
-        children: Kn(_)
-    }) : null
-      , d = () => w.jsxs("div", {
-        style: {
-            display: "flex",
-            gap: "1rem",
-            fontSize: "11px",
-            lineHeight: "1.2"
-        },
-        children: [w.jsxs("div", {
-            style: {
-                display: "flex",
-                alignItems: "center",
-                gap: "4px"
-            },
-            children: [w.jsx("div", {
-                style: {
-                    width: 12,
-                    height: 12,
-                    backgroundColor: Wt.terciary
-                }
-            }), w.jsx("span", {
-                style: {
-                    color: Wt.terciary
-                },
-                children: "Costs related to mental health in pilot"
-            })]
-        }), w.jsxs("div", {
-            style: {
-                display: "flex",
-                alignItems: "center",
-                gap: "4px"
-            },
-            children: [w.jsx("div", {
-                style: {
-                    width: 12,
-                    height: 12,
-                    backgroundColor: Wt.primary
-                }
-            }), w.jsx("span", {
-                style: {
-                    color: Wt.primary
-                },
-                children: "Total costs related to mental health after  use"
-            })]
-        }), w.jsxs("div", {
-            style: {
-                display: "flex",
-                alignItems: "center",
-                gap: "4px"
-            },
-            children: [w.jsx("div", {
-                style: {
-                    width: 12,
-                    height: 12,
-                    backgroundColor: Wt.secondary
-                }
-            }), w.jsx("span", {
-                style: {
-                    color: Wt.secondary
-                },
-                children: "Cumulative savings"
-            })]
-        })]
-    });
-    return w.jsxs("div", {
-        className: "grid grid-cols-1 lg:grid-cols-2 gap-6",
-        children: [w.jsxs("div", {
-            className: "bg-white p-6 rounded-lg shadow-lg",
-            children: [w.jsx(md, {
-                title: "Your company's costs related to mental health",
-                infoKey: "costs"
-            }), w.jsx("div", {
-                className: "text-2xl font-bold text-gray-900 mb-4",
-                children: Kn(i)
-            }), w.jsx("div", {
-                className: "h-[300px] w-full",
-                children: w.jsx(ma, {
-                    children: w.jsxs(Um, {
-                        data: s,
-                        layout: "vertical",
-                        margin: {
-                            top: 5,
-                            right: 80,
-                            left: 100,
-                            bottom: 5
-                        },
-                        children: [w.jsx(dd, {
-                            strokeDasharray: "3 3"
-                        }), w.jsx(qo, {
-                            type: "number",
-                            tickFormatter: p => `€${(p / 1e3).toLocaleString()}k`
-                        }), w.jsx(Go, {
-                            type: "category",
-                            dataKey: "name",
-                            width: 100
-                        }), w.jsx(Et, {
-                            formatter: p => Kn(p),
-                            labelStyle: {
-                                color: "#111827"
-                            },
-                            contentStyle: {
-                                backgroundColor: "white",
-                                border: "1px solid #E5E7EB"
-                            }
-                        }), w.jsx(_r, {
-                            dataKey: "value",
-                            label: w.jsx(f, {}),
-                            children: s.map( (p, h) => w.jsx(sn, {
-                                fill: p.color
-                            }, `cell-${h}`))
-                        })]
-                    })
-                })
-            })]
-        }), w.jsxs("div", {
-            className: "bg-white p-6 rounded-lg shadow-lg",
-            children: [w.jsx(md, {
-                title: "Expected improvement",
-                infoKey: "improvement"
-            }), w.jsxs("p", {
-                className: "text-gray-600 mb-4",
-                children: ["We can expect an improvement of between ", w.jsxs("strong", {
-                    children: [l, "%"]
-                }), " and", " ", w.jsxs("strong", {
-                    children: [u, "%"]
-                }), " in costs related to mental health annually."]
-            }), w.jsx("div", {
-                className: "h-[300px] w-full",
-                children: w.jsx(ma, {
-                    children: w.jsxs(Um, {
-                        data: o,
-                        margin: {
-                            top: 30,
-                            right: 30,
-                            left: 20,
-                            bottom: 5
-                        },
-                        children: [w.jsx(dd, {
-                            strokeDasharray: "3 3"
-                        }), w.jsx(qo, {
-                            dataKey: "name",
-                            tick: {
-                                fontSize: 14
-                            }
-                        }), w.jsx(Go, {
-                            tickFormatter: p => `€${(p / 1e3).toLocaleString()}k`
-                        }), w.jsx(Et, {
-                            formatter: (p, h) => h === "costs" ? [Kn(p), a ? "Costs related to mental health" : "Costs after  use"] : h === "savings" ? [Kn(p), "Cumulative savings"] : [Kn(p), h],
-                            labelStyle: {
-                                color: "#111827"
-                            },
-                            contentStyle: {
-                                backgroundColor: "white",
-                                border: "1px solid #E5E7EB"
-                            }
-                        }), a ? w.jsxs(w.Fragment, {
-                            children: [w.jsx(Cn, {
-                                content: w.jsx(d, {})
-                            }), w.jsx(_r, {
-                                dataKey: "costs",
-                                label: w.jsx(c, {}),
-                                children: o.map( (p, h) => w.jsx(sn, {
-                                    fill: p.originalYear === 0 ? Wt.terciary : Wt.primary
-                                }, `cell-${h}`))
-                            }), w.jsx(_r, {
-                                dataKey: "savings",
-                                fill: Wt.secondary,
-                                label: w.jsx(c, {})
-                            })]
-                        }) : w.jsxs(w.Fragment, {
-                            children: [w.jsx(Cn, {}), w.jsx(_r, {
-                                dataKey: "costs",
-                                fill: Wt.primary,
-                                name: "Costs after  use",
-                                label: w.jsx(c, {})
-                            }), w.jsx(_r, {
-                                dataKey: "savings",
-                                fill: Wt.secondary,
-                                name: "Cumulative savings",
-                                label: w.jsx(c, {})
-                            })]
-                        })]
-                    })
-                })
-            })]
-        })]
-    })
+    }];
+    const l = Math.max(0, n.expectedImprovement - 5);
+    const u = n.expectedImprovement + 5;
+
+    const f = ({x: p, y: h, width: v, value: _}) => (
+        <text x={p + v + 5} y={h + 20} fill="#666" textAnchor="start" fontSize={11}>
+            {Kn(_)}
+        </text>
+    );
+
+    const c = ({x: p, y: h, width: v, value: _}) => _ ? (
+        <text x={p + v / 2} y={h - 10} fill="#666" textAnchor="middle" fontSize={11}>
+            {Kn(_)}
+        </text>
+    ) : null;
+
+    const d = () => (
+        <div style={{display: "flex", gap: "1rem", fontSize: "11px", lineHeight: "1.2"}}>
+            <div style={{display: "flex", alignItems: "center", gap: "4px"}}>
+                <div style={{width: 12, height: 12, backgroundColor: Wt.terciary}} />
+                <span style={{color: Wt.terciary}}>Costs related to mental health in pilot</span>
+            </div>
+            <div style={{display: "flex", alignItems: "center", gap: "4px"}}>
+                <div style={{width: 12, height: 12, backgroundColor: Wt.primary}} />
+                <span style={{color: Wt.primary}}>Total costs related to mental health after company use</span>
+            </div>
+            <div style={{display: "flex", alignItems: "center", gap: "4px"}}>
+                <div style={{width: 12, height: 12, backgroundColor: Wt.secondary}} />
+                <span style={{color: Wt.secondary}}>Cumulative savings</span>
+            </div>
+        </div>
+    );
+
+    return (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+                <md title="Your company's costs related to mental health" infoKey="costs" />
+                <div className="text-2xl font-bold text-gray-900 mb-4">{Kn(i)}</div>
+                <div ref={costsChartRef} className="h-[300px] w-full">
+                    <ResponsiveContainer>
+                        <BarChart
+                            data={s}
+                            layout="vertical"
+                            margin={{top: 5, right: 80, left: 100, bottom: 5}}
+                        >
+                            <XAxis type="number" tickFormatter={p => `€${(p / 1e3).toLocaleString()}k`} />
+                            <YAxis type="category" dataKey="name" width={100} />
+                            <Tooltip
+                                formatter={p => Kn(p)}
+                                labelStyle={{color: "#111827"}}
+                                contentStyle={{backgroundColor: "white", border: "1px solid #E5E7EB"}}
+                            />
+                            <Bar dataKey="value" label={<f />}>
+                                {s.map((p, h) => (
+                                    <Cell key={`cell-${h}`} fill={p.color} />
+                                ))}
+                            </Bar>
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+                <button
+                    onClick={saveCostsChart}
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                    Save Costs Chart
+                </button>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+                <md title="Expected improvement" infoKey="improvement" />
+                <p className="text-gray-600 mb-4">
+                    We can expect an improvement of between <strong>{l}%</strong> and{" "}
+                    <strong>{u}%</strong> in costs related to mental health annually.
+                </p>
+                <div ref={improvementChartRef} className="h-[300px] w-full">
+                    <ResponsiveContainer>
+                        <BarChart
+                            data={o}
+                            margin={{top: 30, right: 30, left: 20, bottom: 5}}
+                        >
+                            <XAxis dataKey="name" tick={{fontSize: 14}} />
+                            <YAxis tickFormatter={p => `€${(p / 1e3).toLocaleString()}k`} />
+                            <Tooltip
+                                formatter={(p, h) => 
+                                    h === "costs" 
+                                        ? [Kn(p), a ? "Costs related to mental health" : "Costs after company use"]
+                                        : h === "savings" 
+                                            ? [Kn(p), "Cumulative savings"] 
+                                            : [Kn(p), h]
+                                }
+                                labelStyle={{color: "#111827"}}
+                                contentStyle={{backgroundColor: "white", border: "1px solid #E5E7EB"}}
+                            />
+                            {a ? (
+                                <>
+                                    <Legend content={<d />} />
+                                    <Bar dataKey="costs" label={<c />}>
+                                        {o.map((p, h) => (
+                                            <Cell 
+                                                key={`cell-${h}`} 
+                                                fill={p.originalYear === 0 ? Wt.terciary : Wt.primary} 
+                                            />
+                                        ))}
+                                    </Bar>
+                                    <Bar dataKey="savings" fill={Wt.secondary} label={<c />} />
+                                </>
+                            ) : (
+                                <>
+                                    <Legend />
+                                    <Bar dataKey="costs" fill={Wt.primary} name="Costs after company use" label={<c />} />
+                                    <Bar dataKey="savings" fill={Wt.secondary} name="Cumulative savings" label={<c />} />
+                                </>
+                            )}
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+                <button
+                    onClick={saveImprovementChart}
+                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                    Save Improvement Chart
+                </button>
+            </div>
+        </div>
+    );
 }
+
+export default kre;
 const SC = () => w.jsxs("div", {
     className: "flex flex-col items-center justify-center h-[60vh] bg-white rounded-lg shadow-sm p-8",
     children: [w.jsx("div", {
