@@ -40183,7 +40183,7 @@ function Pre({employeesByCountry: e, employeesByType: t, showCharts: r}) {
     );
 }
 
-export default Pre;
+export { Pre };
 const md = ({title: e, infoKey: t}) => w.jsxs("div", {
     className: "flex items-center gap-2",
     children: [w.jsx("h3", {
@@ -40334,7 +40334,7 @@ function Ere({absenteeismByType: e, absenteeismByLength: t, totalRate: r, mental
     );
 }
 
-export default Ere;
+export { Ere };
 function Are({riskProfile: e}) {
     const t = [{
         name: "High Risk",
@@ -40456,24 +40456,6 @@ function Are({riskProfile: e}) {
             })
         })]
     })
-}
-const Wt = {
-    lowRisk: "#10B981",
-    mediumRisk: "#F59E0B",
-    highRisk: "#EF4444",
-    management: "#8B5CF6",
-    whiteCollar: "#6B7280",
-    blueCollar: "#3B82F6",
-    primary: "#4F46E5",
-    secondary: "#10B981",
-    terciary: "#F59E0B",
-    accent: "#F59E0B"
-}
-  , $re = {
-    highRisk: 3,
-    mediumRisk: 65,
-    lowRisk: 32,
-    expectedImprovement: 20
 };
 function wC() {
     const [e,t] = L.useState(!0)
